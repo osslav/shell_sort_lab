@@ -28,6 +28,7 @@ public:
 
 Array::Array(const int* copy, int count)
 {
+	if (count < 0) throw "Error. Count_ in array always must be > -1\n";
 	array_ = new int[count]; 
 	count_ = count;
 	for (int i = 0; i < count_; i++) array_[i] = copy[i];
@@ -48,6 +49,8 @@ void Array::randArray()
 
 void Array::sortingDirectInsert(int firstInd, int step)
 {
+	if ((firstInd > count_) || (firstInd < 0) || (step < 1)) throw "Error in direct insert sorting\n";
+
 	for (int i = firstInd + step; i < count_; i += step)
 	{
 		int x = array_[i], j = i - step;
@@ -99,30 +102,35 @@ int main()
 {
 	srand(time(NULL));
 
-	if (true)
+	try
 	{
-		int b[5] = { 1, 28, 10, 9 };
-		Array B(b, 5);
-		B.sortingShell(true);
-		cout << "Array after sorting: ";
-		B.output();
-	}
-	else
-	{
-		Array A(100);
-		for (int i = 0; i < 100000; i++)
+		if (true)          //выбор режима работы программы
 		{
-			A.randArray();
-			A.sortingShell();
-			if (!A.checkSorting())
-			{
-				cout << "Error: ";
-				A.output();
-			}
+			int b[5] = { 1, 28, 10, 9 };
+			Array B(b, 5);
+			B.sortingShell(true);
+			cout << "Array after sorting: ";
+			B.output();
 		}
-
+		else
+			for (int i = 0; i < 100000; i++)
+			{
+				Array A(rand() % 50);
+				A.randArray();
+				A.sortingShell();
+				if (!A.checkSorting())
+				{
+					cout << "Error: ";
+					A.output();
+				}
+			}
 	}
-
+	catch (const char* errorString)
+	{
+		for (int i = 0; errorString[i] != '\0'; i++) cout << errorString[i];
+		return 1;
+	}
+	
 	return 0;
 }
 
