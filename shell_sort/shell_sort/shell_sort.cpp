@@ -141,7 +141,7 @@ Array* Array::createStepArr3_(bool outputStep)           // h_(i+1) = 3*h_i +1
 
 int Array::sortingShell(int typeStepArray, bool outputStep)
 {
-	Array* stepArr = new Array();
+	Array* stepArr;
 
 	switch (typeStepArray)
 	{
@@ -166,7 +166,7 @@ int Array::sortingShell(int typeStepArray, bool outputStep)
 			this->sortingDirectInsert(b, s);
 	
 	int endTime = clock();
-	delete stepArr->array_;
+	delete stepArr;
 
 	return endTime - startTime;
 }
