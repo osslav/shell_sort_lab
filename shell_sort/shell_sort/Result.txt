@@ -1,0 +1,45 @@
+Shell sorting algorithm
+  Arrays step:
+    1: h_i = h_(i-1) / 2
+    2: h_i = 2^i - 1
+    3: h_(i+1) = 3*h_i +1
+
+Arrays with 10000 elements:
+    With range from -10 to 10
+            Shell sorting 1 time: 2ms  2ms  2ms       Average: 2
+            Shell sorting 2 time: 2ms  3ms  2ms       Average: 2
+            Shell sorting 3 time: 2ms  2ms  2ms       Average: 2
+    With range from -1000 to 1000
+            Shell sorting 1 time: 3ms  2ms  3ms       Average: 2
+            Shell sorting 2 time: 3ms  3ms  4ms       Average: 3
+            Shell sorting 3 time: 4ms  3ms  4ms       Average: 3
+    With range from -100000 to 100000
+            Shell sorting 1 time: 3ms  3ms  4ms       Average: 3
+            Shell sorting 2 time: 3ms  3ms  3ms       Average: 3
+            Shell sorting 3 time: 3ms  3ms  3ms       Average: 3
+Arrays with 100000 elements:
+    With range from -10 to 10
+            Shell sorting 1 time: 19ms  19ms  23ms       Average: 20
+            Shell sorting 2 time: 26ms  23ms  20ms       Average: 23
+            Shell sorting 3 time: 22ms  21ms  22ms       Average: 21
+    With range from -1000 to 1000
+            Shell sorting 1 time: 32ms  30ms  28ms       Average: 30
+            Shell sorting 2 time: 34ms  35ms  32ms       Average: 33
+            Shell sorting 3 time: 32ms  33ms  68ms       Average: 44
+    With range from -100000 to 100000
+            Shell sorting 1 time: 43ms  34ms  33ms       Average: 36
+            Shell sorting 2 time: 36ms  38ms  45ms       Average: 39
+            Shell sorting 3 time: 33ms  33ms  32ms       Average: 32
+Arrays with 1000000 elements:
+    With range from -10 to 10
+            Shell sorting 1 time: 230ms  229ms  241ms       Average: 233
+            Shell sorting 2 time: 264ms  263ms  271ms       Average: 266
+            Shell sorting 3 time: 197ms  209ms  205ms       Average: 203
+    With range from -1000 to 1000
+            Shell sorting 1 time: 380ms  378ms  401ms       Average: 386
+            Shell sorting 2 time: 446ms  432ms  425ms       Average: 434
+            Shell sorting 3 time: 376ms  368ms  462ms       Average: 402
+    With range from -100000 to 100000
+            Shell sorting 1 time: 470ms  484ms  473ms       Average: 475
+            Shell sorting 2 time: 565ms  614ms  557ms       Average: 578
+            Shell sorting 3 time: 459ms  451ms  448ms       Average: 452

@@ -1,6 +1,19 @@
 ﻿#include <iostream>
+#include <fstream>
 #include <ctime>
 using namespace std;
+
+/*
+Отчет хранится в    shell_sort_lab\shell_sort\shell_sort\Result.txt
+
+Структура хранения массивов в файле:
+
+Сначала количество элементов массива(count_), затем все элементы массива по порядку.
+count_ и все элементы разделены символом ' '
+Массивы разделены символом '\n'
+
+*/
+
 
 int const DEFAULT_MAX_NUMBER = 99;
 int const DEFAULT_MIN_NUMBER = 0;
@@ -22,6 +35,8 @@ public:
 	~Array() { delete array_; };
 
 	void randArray(int minNumber = DEFAULT_MIN_NUMBER, int maxNumber = DEFAULT_MAX_NUMBER);
+	friend ofstream& operator <<(ofstream& file, Array& Mas);
+	friend ifstream& operator >>(ifstream& file, Array& Mas);
 	void output();
 
 	int sortingShell(int typeStepArray, bool outputStep = false);
@@ -30,6 +45,8 @@ public:
 	bool checkSorting();
 
 	void operator =(const Array& copy);
+
+	int getCount() { return count_; };
 };
 
 Array::Array(const int* copy, int count)
@@ -59,6 +76,30 @@ void Array::randArray(int minNumber, int maxNumber)
 	for (int i = 0; i < count_; i++) array_[i] = rand() % (maxNumber + 1) + minNumber;
 }
 
+ofstream& operator <<(ofstream& file, Array& Mas)
+{
+	file << Mas.count_;
+	for (int i = 0; i < Mas.count_; i++) file << ' ' << Mas.array_[i];
+	file << '\n';
+	return file;
+}
+
+ifstream& operator >>(ifstream& file, Array& Mas)
+{
+	int oldCount = Mas.count_;
+	file >> Mas.count_;
+
+	if (Mas.count_ == '\0') return file;
+
+	if (oldCount != Mas.count_)
+	{	
+		delete Mas.array_;	
+		Mas.array_ = new int[Mas.count_];
+	}	
+	for (int i = 0; i < Mas.count_; i++) file >> Mas.array_[i];
+
+	return file;
+}
 
 void Array::sortingDirectInsert(int firstInd, int step)
 {
@@ -188,48 +229,88 @@ void Array::operator =(const Array& copy)
 	for (int i = 0; i < count_; i++) array_[i] = copy.array_[i];
 }
 
+
+void createArrays(const char* fileName)
+{
+	ofstream fileArray(fileName);
+	
+	for (int count = 10000; count <= 1000000; count *= 10)
+	{
+		Array A(count);
+		for (int range = 10; range <= 100000; range *= 100)
+		{
+			A.randArray(-range, range);
+
+			fileArray << A;
+		}
+	}
+}
+
+void analysisShellSorting(const char* fileArraysName, const char* fileResultName)
+{
+	ifstream fileArray(fileArraysName);
+	ofstream fileResult(fileResultName);
+	
+	int lastCount = -1;
+	int range = 10;
+	
+	fileResult << "Shell sorting algorithm\n";
+	fileResult << "  Arrays step:\n";
+	fileResult << "    1: h_i = h_(i-1) / 2\n";
+	fileResult << "    2: h_i = 2^i - 1\n";
+	fileResult << "    3: h_(i+1) = 3*h_i +1\n\n";
+
+	Array A;
+	fileArray >> A;
+	while (fileArray)
+	{	
+		if (lastCount != A.getCount()) fileResult << "Arrays with " << A.getCount() << " elements:\n";
+		lastCount = A.getCount();
+
+		fileResult << "    With range from " << -range << " to " << range << "\n";
+
+		if (range == 100000) range = 10;
+		else range *= 100;
+
+
+		for (int typeSorting = 1; typeSorting <= 3; typeSorting++)
+		{
+			fileResult << "            Shell sorting " << typeSorting << " time: ";
+
+			int summTime = 0;
+			int countRepeatSorts = 3;
+			for (int j = 0; j < countRepeatSorts; j++)
+			{
+				Array forSorting(A);
+				int sortingTime = forSorting.sortingShell(typeSorting);
+
+				fileResult << sortingTime << "ms  ";
+				summTime += sortingTime;
+
+				if (!forSorting.checkSorting())
+				{
+					fileResult << "Error! Array was not sorted\n";
+					fileResult.close();
+					fileArray.close();
+					throw "Error! Array was not sorted\n";
+				}
+			}
+			fileResult << "     Average: " << summTime / countRepeatSorts << '\n';
+		}
+
+		fileArray >> A;
+	}
+}
+
 int main()
 {
 	srand(time(NULL));
 
 	try
 	{
-		bool analysisMode = true; // режим анализа алгоритма
-		bool workMode = false; // режим сортировки массива
+		//createArrays("Array.txt");
 
-		if (workMode)
-		{
-			int a[10] = { 4, 6, 8, 3, 1, 5, 2, 9, 3, 7 };
-			Array A(a, 10);
-			cout << A.sortingShell(3, true) << "ms\n";
-			A.output();
-		}
-
-		if (analysisMode)
-		{
-			for (int count = 10000; count <= 1000000; count *= 10)
-			{
-				Array A(count);
-				cout << "Arrays with " << count << " elements:\n";
-				for (int range = 10; range <= 100000; range *= 100)
-				{
-					A.randArray(-range, range);
-					cout << "    With range from " << -range << " to " << range << "\n";
-					
-					for (int i = 1; i <= 3; i++)
-					{
-						cout << "        Array " << i << " :\n";
-						for (int typeSorting = 1; typeSorting <= 3; typeSorting++)
-						{
-							Array notSorting(A);
-							cout << "            Type sorting " << typeSorting << " time: " << A.sortingShell(typeSorting) << "ms\n";
-							if (!A.checkSorting()) cout << "Error! Array was not sorted\n\n\n";
-							A = notSorting;
-						}
-					}
-				}
-			}
-		}
+		analysisShellSorting("Array.txt", "Result.txt");
 	
 	}
 	
