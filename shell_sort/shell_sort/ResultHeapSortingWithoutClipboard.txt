@@ -1,0 +1,22 @@
+Heap sorting algorithm
+Arrays with 10000 elements:
+    With range from -10 to 10
+            Heap sorting  time: 4ms  3ms  4ms       Average: 3
+    With range from -1000 to 1000
+            Heap sorting  time: 4ms  5ms  4ms       Average: 4
+    With range from -100000 to 100000
+            Heap sorting  time: 4ms  3ms  3ms       Average: 3
+Arrays with 100000 elements:
+    With range from -10 to 10
+            Heap sorting  time: 26ms  28ms  31ms       Average: 28
+    With range from -1000 to 1000
+            Heap sorting  time: 41ms  36ms  69ms       Average: 48
+    With range from -100000 to 100000
+            Heap sorting  time: 32ms  32ms  30ms       Average: 31
+Arrays with 1000000 elements:
+    With range from -10 to 10
+            Heap sorting  time: 259ms  266ms  258ms       Average: 261
+    With range from -1000 to 1000
+            Heap sorting  time: 340ms  347ms  357ms       Average: 348
+    With range from -100000 to 100000
+            Heap sorting  time: 407ms  394ms  391ms       Average: 397
