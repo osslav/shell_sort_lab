@@ -38,12 +38,21 @@ public:
 	friend std::ifstream& operator >>(std::ifstream& file, Array& Mas);
 	void output();
 
+	void swap(int i, int j);
+
 	int sortingShell(int typeStepArray, bool outputStep = false);
 	void sortingDirectInsert(int firstInd = 0, int step = 1);
 
 	int sortingHeap();
 	void sift(int index, int n = -1);
 	void siftWithoutClipboard(int i, int n = -1);
+
+	int sortingHoare(int typeSorting, double rangeMin, double rangeMax, int indexLeft, int indexRight);
+
+	void sortingHoare1(double rangeMin, double rangeMax, int indexLeft, int indexRight);
+	void sortingHoare2(int indexLeft, int indexRight);
+	void sortingHoare3(int indexLeft, int indexRight);
+
 
 	bool checkSorting();
 
@@ -74,10 +83,16 @@ void Array::output()
 	std::cout << '\n';
 }
 
+inline void Array::swap(int i, int j)
+{
+	int c = array_[i];								
+	array_[i] = array_[j];
+	array_[j] = c;
+}
 
 void Array::randArray(int minNumber, int maxNumber)
 {
-	for (int i = 0; i < count_; i++) array_[i] = rand() % (maxNumber + 1) + minNumber;
+	for (int i = 0; i < count_; i++) array_[i] = rand() % (maxNumber - minNumber + 1) + minNumber;
 }
 
 std::ofstream& operator <<(std::ofstream& file, Array& Mas)
@@ -237,9 +252,7 @@ void Array::siftWithoutClipboard(int i, int n)
 
 		if (array_[j] <= array_[i]) return;				//поверка выполнения условия дерева
 
-		int c = array_[i];								//array_[i] <=> array_[j]
-		array_[i] = array_[j];							
-		array_[j] = c;
+		swap(i, j);										//array_[i] <=> array_[j]
 
 		i = j;											//идем дальше по дереву
 		j = 2 * i + 1;
@@ -306,10 +319,8 @@ int Array::sortingHeap()
 
 	while (n > 1)
 	{
-		int c = array_[n - 1];								//array_[0] <=> array_[n - 1]
-		array_[n - 1] = array_[0];
-		array_[0] = c;
-		
+		swap(n - 1, 0);										//array_[0] <=> array_[n - 1]
+	
 		n--;
 		sift(0, n);											//"просеиваем" 0 элемент
 	}
@@ -317,6 +328,143 @@ int Array::sortingHeap()
 	int endTime = clock();
 	return endTime - startTime;
 }
+
+int Array::sortingHoare(int typeSorting, double rangeMin, double rangeMax, int indexLeft, int indexRight)
+{
+	//std::cout << count_ << "\n";
+
+	int startTime = clock();
+	
+	switch (typeSorting)
+	{
+	case 1:
+		sortingHoare1(rangeMin, rangeMax, indexLeft, indexRight);
+		break;
+	case 2:
+		sortingHoare2(indexLeft, indexRight);
+		break;
+	case 3:
+		sortingHoare3(indexLeft, indexRight);
+		break;
+	default:
+		throw "Error type Hoare sorting\n";
+		break;
+	}
+
+	int endTime = clock();
+	return endTime - startTime;
+}
+
+void Array::sortingHoare1(double rangeMin, double rangeMax, int indexLeft, int indexRight)			//не работает на массивах, записанных в Array.txt		
+{
+	if ((indexLeft >= indexRight) || ((rangeMin > rangeMax - 0.25) && (rangeMin < rangeMax + 0.25))) return;
+		
+
+	int index = indexLeft + 1;
+	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
+		index++;
+
+	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
+
+
+	int i = indexLeft, j = indexRight;
+	double rangeMedium = (rangeMin + rangeMax) / 2;
+
+
+
+	while (i < j)
+	{
+		while ((i <= j) && (array_[i] < rangeMedium)) i++;
+		while ((i <= j) && (array_[j] >= rangeMedium)) j--;
+
+		if (i < j)
+		{
+			swap(i, j);
+			i++;
+			j--;
+		}
+	}
+	
+	sortingHoare1(rangeMin,	rangeMedium - 0.5, indexLeft, j);
+
+	sortingHoare1(rangeMedium + 0.5, rangeMax, i, indexRight);
+}
+
+void Array::sortingHoare2(int indexLeft, int indexRight)
+{
+	if (indexLeft >= indexRight) return;
+
+
+	int index = indexLeft + 1;
+	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
+		index++;
+
+	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
+
+
+	int i = indexLeft + 1, j = indexRight;
+	int rangeMedium = array_[indexLeft];
+
+	while (i <= j)
+	{
+		while ((i <= j) && (array_[i] <= rangeMedium)) i++;
+		while ((i <= j) && (array_[j] > rangeMedium)) j--;
+
+		if (i < j)
+		{
+			swap(i, j);
+			i++;
+			j--;
+		}
+	}
+
+	swap(indexLeft, j);
+	j--;
+
+	//std::cout << "Medium point : " << rangeMedium << " output: ";
+	//std::cout << "from " << indexLeft << " to " << indexRight << " output: ";
+	//output();
+
+	sortingHoare2(indexLeft, j);
+
+
+	sortingHoare2(i, indexRight);
+
+}
+
+void Array::sortingHoare3(int indexLeft, int indexRight)
+{
+	if (indexLeft >= indexRight) return;
+
+
+	int index = indexLeft + 1;
+	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
+		index++;
+
+	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
+																				//здесь она не обязательна для корректной работы, но с ней выполняется значительно быстрее
+
+	int i = indexLeft, j = indexRight;
+	int rangeMedium = array_[int((indexLeft + indexRight) / 2)];
+
+	while (i < j)
+	{
+		while (array_[i] < rangeMedium) i++;
+		while (array_[j] > rangeMedium) j--;
+
+		if (i <= j)
+		{
+			swap(i, j);
+			i++;
+			j--;
+		}
+	}
+
+	sortingHoare3(indexLeft, j);
+
+	sortingHoare3(i, indexRight);
+}
+
 
 bool Array::checkSorting()
 {
@@ -459,17 +607,73 @@ void analysisHeapSorting(const char* fileArraysName, const char* fileResultName)
 	}
 }
 
+
+void analysisHoareSorting(const char* fileArraysName, const char* fileResultName)
+{
+	std::ifstream fileArray(fileArraysName);
+	std::ofstream fileResult(fileResultName);
+
+	int lastCount = -1;
+	int range = 10;
+
+	fileResult << "Hoare sorting algorithm\n";
+
+	Array A;
+	fileArray >> A;
+	while (fileArray)
+	{
+		if (lastCount != A.getCount()) fileResult << "Arrays with " << A.getCount() << " elements:\n";
+		lastCount = A.getCount();
+
+		fileResult << "    With range from " << -range << " to " << range << "\n";
+
+		if (range == 100000) range = 10;
+		else range *= 100;
+
+
+		for (int typeSorting = 2; typeSorting <= 3; typeSorting++)
+		{
+			fileResult << "            Hoare sorting type " << typeSorting << " time: ";
+
+			int summTime = 0;
+			int countRepeatSorts = 3;
+			for (int j = 0; j < countRepeatSorts; j++)
+			{
+				Array forSorting(A);
+				int sortingTime = forSorting.sortingHoare(typeSorting, -range, range, 0, forSorting.getCount() - 1);
+
+				fileResult << sortingTime << "ms  ";
+				summTime += sortingTime;
+
+				if (!forSorting.checkSorting())
+				{
+					fileResult << "Error! Array was not sorted\n";
+					fileResult.close();
+					fileArray.close();
+					throw "Error! Array was not sorted\n";
+				}
+			}
+			fileResult << "     Average: " << summTime / countRepeatSorts << '\n';
+		}
+
+		fileArray >> A;
+	}
+}
+
+
 int main()
 {
 	srand(time(NULL));
 
 	try
 	{
-		//createArrays("Array.txt");
+		//createArrays("newArray.txt");
 
 		//analysisShellSorting("Array.txt", "ResultShellSortingTest.txt");
 
-		analysisHeapSorting("Array.txt", "ResultHeapSorting.txt");
+		//analysisHeapSorting("Array.txt", "ResultHeapSorting.txt");
+
+		analysisHoareSorting("Array.txt", "ResultHoareSorting.txt");
 	}
 	
 	
