@@ -53,6 +53,8 @@ public:
 	void sortingHoare2(int indexLeft, int indexRight);
 	void sortingHoare3(int indexLeft, int indexRight);
 
+	int sortingBitwise();
+	void sortingBitwiseRecursion(int indexLeft, int indexRight, int k);
 
 	bool checkSorting();
 
@@ -266,8 +268,8 @@ void Array::sift(int i, int n)
 	if (n == -1) n = count_;
 	else
 	{
-		if (i < 0) throw "Error in sift function. index < 0.\n";
-		if (i >= count_) throw "Error in sift function. index >= count_.\n";
+		if (n < 0) throw "Error in sift function. n < 0.\n";
+		if (n > count_) throw "Error in sift function. n >= count_.\n";
 	}
 
 
@@ -334,7 +336,7 @@ int Array::sortingHoare(int typeSorting, double rangeMin, double rangeMax, int i
 	//std::cout << count_ << "\n";
 
 	int startTime = clock();
-	
+	std::cout << indexRight + 1 << '\n';
 	switch (typeSorting)
 	{
 	case 1:
@@ -357,22 +359,22 @@ int Array::sortingHoare(int typeSorting, double rangeMin, double rangeMax, int i
 
 void Array::sortingHoare1(double rangeMin, double rangeMax, int indexLeft, int indexRight)			//не работает на массивах, записанных в Array.txt		
 {
-	if ((indexLeft >= indexRight) || ((rangeMin > rangeMax - 0.25) && (rangeMin < rangeMax + 0.25))) return;
+	if ((indexLeft >= indexRight) || (rangeMax == rangeMin)) return;
 		
-
+	/*
 	int index = indexLeft + 1;
 	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
 		index++;
 
 	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
-
+	*/
 
 	int i = indexLeft, j = indexRight;
 	double rangeMedium = (rangeMin + rangeMax) / 2;
+	
 
 
-
-	while (i < j)
+	while (i <= j)
 	{
 		while ((i <= j) && (array_[i] < rangeMedium)) i++;
 		while ((i <= j) && (array_[j] >= rangeMedium)) j--;
@@ -394,13 +396,13 @@ void Array::sortingHoare2(int indexLeft, int indexRight)
 {
 	if (indexLeft >= indexRight) return;
 
-
+	/*
 	int index = indexLeft + 1;
 	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
 		index++;
 
 	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
-
+*/	
 
 	int i = indexLeft + 1, j = indexRight;
 	int rangeMedium = array_[indexLeft];
@@ -436,13 +438,13 @@ void Array::sortingHoare3(int indexLeft, int indexRight)
 {
 	if (indexLeft >= indexRight) return;
 
-
+	/*
 	int index = indexLeft + 1;
 	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
 		index++;
 
 	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
-																				//здесь она не обязательна для корректной работы, но с ней выполняется значительно быстрее
+		*/																		//здесь она не обязательна для корректной работы, но с ней выполняется значительно быстрее
 
 	int i = indexLeft, j = indexRight;
 	int rangeMedium = array_[int((indexLeft + indexRight) / 2)];
@@ -464,6 +466,91 @@ void Array::sortingHoare3(int indexLeft, int indexRight)
 
 	sortingHoare3(i, indexRight);
 }
+
+
+int Array::sortingBitwise()
+{
+	std::cout << count_ << '\n';
+	int startTime = clock();
+
+	int indexLeft = 0, indexRight = count_ - 1;
+	if (indexLeft >= indexRight) return 0;
+
+	int k = 31;
+
+	/*
+	int index = indexLeft + 1;
+	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
+		index++;
+
+	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
+*/
+
+	int i = indexLeft, j = indexRight;
+	int mask = 1 << k;
+
+	while (i <= j)
+	{
+		while ((i <= j) && ((array_[i] & mask) != 0)) i++;
+		while ((i <= j) && ((array_[j] & mask) == 0)) j--;
+
+		if (i < j)
+		{
+			swap(i, j);
+			i++;
+			j--;
+		}
+	}
+
+
+	sortingBitwiseRecursion(indexLeft, j, k-1);
+
+
+	sortingBitwiseRecursion(i, indexRight, k-1);
+
+	int endTime = clock();
+	return endTime - startTime;
+};
+
+void Array::sortingBitwiseRecursion(int indexLeft, int indexRight, int k)
+{
+	if ((indexLeft >= indexRight) || (k < 0)) return;
+
+
+
+	/*
+	int index = indexLeft + 1;
+	while ((indexRight >= index) && (array_[index] == array_[indexLeft]))
+		index++;
+
+	if (index == indexRight + 1) return;										//проверка на то, что рассматриваемый подмассив не состоит из одинаковых элементов
+*/
+
+	int i = indexLeft;
+	int j = indexRight;
+	int mask = 1 << k;
+
+	while (i <= j)
+	{
+		while ((i <= j) && ((array_[i] & mask) == 0)) i++;
+		while ((i <= j) && ((array_[j] & mask) != 0)) j--;
+
+		if (i < j)
+		{
+			//std::cout << '+';
+			swap(i, j);
+			i++;
+			j--;
+		}
+	}
+	//std::cout << "\nfrom " << indexLeft << " to " << indexRight << " k = " << k << " : ";
+	//output();
+
+	sortingBitwiseRecursion(indexLeft, j, k-1);
+
+
+	sortingBitwiseRecursion(i, indexRight, k-1);
+};
 
 
 bool Array::checkSorting()
@@ -631,7 +718,7 @@ void analysisHoareSorting(const char* fileArraysName, const char* fileResultName
 		else range *= 100;
 
 
-		for (int typeSorting = 2; typeSorting <= 3; typeSorting++)
+		for (int typeSorting = 1; typeSorting <= 3; typeSorting++)
 		{
 			fileResult << "            Hoare sorting type " << typeSorting << " time: ";
 
@@ -660,6 +747,56 @@ void analysisHoareSorting(const char* fileArraysName, const char* fileResultName
 	}
 }
 
+void analysisBitwiseSorting(const char* fileArraysName, const char* fileResultName)
+{
+	std::ifstream fileArray(fileArraysName);
+	std::ofstream fileResult(fileResultName);
+
+	int lastCount = -1;
+	int range = 10;
+
+	fileResult << "Bitwise sorting algorithm\n";
+
+
+	Array A;
+	fileArray >> A;
+	while (fileArray)
+	{
+		if (lastCount != A.getCount()) fileResult << "Arrays with " << A.getCount() << " elements:\n";
+		lastCount = A.getCount();
+
+		fileResult << "    With range from " << -range << " to " << range << "\n";
+
+		if (range == 100000) range = 10;
+		else range *= 100;
+
+
+		fileResult << "            Bitwise sorting  time: ";
+
+		int summTime = 0;
+		int countRepeatSorts = 3;
+		for (int j = 0; j < countRepeatSorts; j++)
+		{
+			Array forSorting(A);
+			int sortingTime = forSorting.sortingBitwise();
+
+			fileResult << sortingTime << "ms  ";
+			summTime += sortingTime;
+
+			if (!forSorting.checkSorting())
+			{
+				fileResult << "Error! Array was not sorted\n";
+				fileResult.close();
+				fileArray.close();
+				throw "Error! Array was not sorted\n";
+			}
+		}
+		fileResult << "     Average: " << summTime / countRepeatSorts << '\n';
+
+		fileArray >> A;
+	}
+}
+
 
 int main()
 {
@@ -673,7 +810,22 @@ int main()
 
 		//analysisHeapSorting("Array.txt", "ResultHeapSorting.txt");
 
-		analysisHoareSorting("Array.txt", "ResultHoareSorting.txt");
+		//analysisHoareSorting("Array.txt", "ResultHoareSorting.txt");
+		
+		analysisBitwiseSorting("Array.txt", "ResultBitwiseSorting.txt");
+		
+		
+		/*
+		int arr[5] = { 5, 4, 3, 6, 1};
+		int arrp[5] = { 5, 2, 4, 3, 1 };
+		int arrn[5] = { -1, -2, -3, -4, -5 };
+		Array test(arr, 10);
+		test.randArray(-100, 100);
+		test.output();
+		test.sortingBitwise();
+		test.output();
+		std::cout << test.checkSorting();*/
+
 	}
 	
 	
