@@ -2,7 +2,6 @@
 #include <fstream>
 #include <ctime>
 
-#pragma comment(linker, "/STACK:41943040000")
 /*
 Отчет хранится в    shell_sort_lab\shell_sort\shell_sort\Result.txt
 
