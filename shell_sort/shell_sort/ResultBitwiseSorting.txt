@@ -1,22 +1,22 @@
 Bitwise sorting algorithm
 Arrays with 10000 elements:
     With range from -10 to 10
-            Bitwise sorting  time: 2ms  1ms  1ms       Average: 1
+            Bitwise sorting  time: 1ms  1ms  2ms       Average: 1
     With range from -1000 to 1000
-            Bitwise sorting  time: 3ms  3ms  2ms       Average: 2
+            Bitwise sorting  time: 5ms  3ms  3ms       Average: 3
     With range from -100000 to 100000
-            Bitwise sorting  time: 4ms  3ms  4ms       Average: 3
+            Bitwise sorting  time: 5ms  6ms  6ms       Average: 5
 Arrays with 100000 elements:
     With range from -10 to 10
-            Bitwise sorting  time: 11ms  11ms  12ms       Average: 11
+            Bitwise sorting  time: 13ms  15ms  17ms       Average: 15
     With range from -1000 to 1000
-            Bitwise sorting  time: 21ms  24ms  26ms       Average: 23
+            Bitwise sorting  time: 73ms  34ms  30ms       Average: 45
     With range from -100000 to 100000
-            Bitwise sorting  time: 41ms  37ms  44ms       Average: 40
+            Bitwise sorting  time: 32ms  32ms  35ms       Average: 33
 Arrays with 1000000 elements:
     With range from -10 to 10
-            Bitwise sorting  time: 119ms  117ms  112ms       Average: 116
+            Bitwise sorting  time: 116ms  122ms  136ms       Average: 124
     With range from -1000 to 1000
-            Bitwise sorting  time: 223ms  217ms  216ms       Average: 218
+            Bitwise sorting  time: 220ms  220ms  228ms       Average: 222
     With range from -100000 to 100000
-            Bitwise sorting  time: 304ms  289ms  293ms       Average: 295
+            Bitwise sorting  time: 316ms  344ms  296ms       Average: 318

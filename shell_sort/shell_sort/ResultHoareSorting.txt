@@ -1,31 +1,40 @@
 Hoare sorting algorithm
 Arrays with 10000 elements:
     With range from -10 to 10
-            Hoare sorting type 2 time: 1ms  1ms  1ms       Average: 1
-            Hoare sorting type 3 time: 2ms  2ms  2ms       Average: 2
+            Hoare sorting type 1 time: 1ms  1ms  1ms       Average: 1
+            Hoare sorting type 2 time: 25ms  21ms  18ms       Average: 21
+            Hoare sorting type 3 time: 4ms  6ms  5ms       Average: 5
     With range from -1000 to 1000
-            Hoare sorting type 2 time: 2ms  2ms  4ms       Average: 2
-            Hoare sorting type 3 time: 5ms  4ms  4ms       Average: 4
+            Hoare sorting type 1 time: 4ms  3ms  4ms       Average: 3
+            Hoare sorting type 2 time: 5ms  3ms  3ms       Average: 3 
+            Hoare sorting type 3 time: 6ms  7ms  11ms       Average: 8
     With range from -100000 to 100000
-            Hoare sorting type 2 time: 4ms  6ms  4ms       Average: 4
-            Hoare sorting type 3 time: 7ms  6ms  5ms       Average: 6
+            Hoare sorting type 1 time: 29ms  13ms  7ms       Average: 16
+            Hoare sorting type 2 time: 11ms  5ms  5ms       Average: 7
+            Hoare sorting type 3 time: 6ms  8ms  6ms       Average: 6
 Arrays with 100000 elements:
     With range from -10 to 10
-            Hoare sorting type 2 time: 10ms  9ms  9ms       Average: 9
-            Hoare sorting type 3 time: 14ms  14ms  15ms       Average: 14
+            Hoare sorting type 1 time: 8ms  7ms  8ms       Average: 7
+            Hoare sorting type 2 time: 1293ms  1132ms  1126ms       Average: 1183
+            Hoare sorting type 3 time: 62ms  60ms  53ms       Average: 58
     With range from -1000 to 1000
-            Hoare sorting type 2 time: 21ms  29ms  33ms       Average: 27
-            Hoare sorting type 3 time: 45ms  35ms  37ms       Average: 39
+            Hoare sorting type 1 time: 25ms  21ms  29ms       Average: 25
+            Hoare sorting type 2 time: 41ms  41ms  43ms       Average: 41
+            Hoare sorting type 3 time: 63ms  64ms  66ms       Average: 64 
     With range from -100000 to 100000
-            Hoare sorting type 2 time: 34ms  42ms  34ms       Average: 36
-            Hoare sorting type 3 time: 44ms  37ms  41ms       Average: 40
+            Hoare sorting type 1 time: 32ms  32ms  35ms       Average: 33
+            Hoare sorting type 2 time: 32ms  32ms  37ms       Average: 33
+            Hoare sorting type 3 time: 45ms  39ms  40ms       Average: 41
 Arrays with 1000000 elements:
     With range from -10 to 10
-            Hoare sorting type 2 time: 64ms  66ms  64ms       Average: 64
-            Hoare sorting type 3 time: 125ms  119ms  117ms       Average: 120
+            Hoare sorting type 1 time: 73ms  64ms  63ms       Average: 66
+            Hoare sorting type 2 time: 110712ms  110811ms  111148ms       Average: 110890
+            Hoare sorting type 3 time: 542ms  513ms  506ms       Average: 520   
     With range from -1000 to 1000
-            Hoare sorting type 2 time: 180ms  174ms  180ms       Average: 178
-            Hoare sorting type 3 time: 227ms  231ms  226ms       Average: 228
+            Hoare sorting type 1 time: 214ms  187ms  184ms       Average: 195
+            Hoare sorting type 2 time: 1483ms  1498ms  1488ms       Average: 1489
+            Hoare sorting type 3 time: 476ms  480ms  480ms       Average: 478
     With range from -100000 to 100000
-            Hoare sorting type 2 time: 265ms  279ms  262ms       Average: 268
-            Hoare sorting type 3 time: 336ms  347ms  337ms       Average: 340
+            Hoare sorting type 1 time: 288ms  291ms  289ms       Average: 289
+            Hoare sorting type 2 time: 379ms  380ms  390ms       Average: 383
+            Hoare sorting type 3 time: 479ms  458ms  469ms       Average: 468

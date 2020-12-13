@@ -2,6 +2,7 @@
 #include <fstream>
 #include <ctime>
 
+#pragma comment(linker, "/STACK:41943040000")
 /*
 Отчет хранится в    shell_sort_lab\shell_sort\shell_sort\Result.txt
 
@@ -359,7 +360,7 @@ int Array::sortingHoare(int typeSorting, double rangeMin, double rangeMax, int i
 
 void Array::sortingHoare1(double rangeMin, double rangeMax, int indexLeft, int indexRight)			//не работает на массивах, записанных в Array.txt		
 {
-	if ((indexLeft >= indexRight) || (rangeMax == rangeMin)) return;
+	if ((indexLeft >= indexRight) || (rangeMax <= rangeMin)) return;
 		
 	/*
 	int index = indexLeft + 1;
@@ -714,11 +715,8 @@ void analysisHoareSorting(const char* fileArraysName, const char* fileResultName
 
 		fileResult << "    With range from " << -range << " to " << range << "\n";
 
-		if (range == 100000) range = 10;
-		else range *= 100;
 
-
-		for (int typeSorting = 1; typeSorting <= 3; typeSorting++)
+		for (int typeSorting = 2; typeSorting <= 2; typeSorting++)
 		{
 			fileResult << "            Hoare sorting type " << typeSorting << " time: ";
 
@@ -742,6 +740,9 @@ void analysisHoareSorting(const char* fileArraysName, const char* fileResultName
 			}
 			fileResult << "     Average: " << summTime / countRepeatSorts << '\n';
 		}
+
+		if (range == 100000) range = 10;
+		else range *= 100;
 
 		fileArray >> A;
 	}
@@ -810,9 +811,9 @@ int main()
 
 		//analysisHeapSorting("Array.txt", "ResultHeapSorting.txt");
 
-		//analysisHoareSorting("Array.txt", "ResultHoareSorting.txt");
+		analysisHoareSorting("Array.txt", "ResultHoareSorting.txt");
 		
-		analysisBitwiseSorting("Array.txt", "ResultBitwiseSorting.txt");
+		//analysisBitwiseSorting("Array.txt", "ResultBitwiseSorting.txt");
 		
 		
 		/*
